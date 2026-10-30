@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Куда пойти с Дашей</title>
+<meta name="description" content="Детские спектакли, ёлки и цирк в Кирове для ребёнка 3–6 лет: ноябрь — январь.">
+<meta property="og:title" content="Куда пойти с Дашей">
+<meta property="og:description" content="Детская афиша Кирова: театр кукол, ёлки, цирк. Ноябрь — январь.">
+<meta name="theme-color" content="#FBF7F1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎭</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FBF7F1;--card:#fff;--ink:#1F2033;--muted:#5F6272;--faint:#CFC9C0;--line:#EEE6DA;--accent:#E4572E;--soft:#FFF3EA}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-size:16px}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 18px 56px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+h1{font-size:28px;font-weight:900;margin:0;letter-spacing:-.02em}
+.toggle{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--muted);white-space:nowrap}
+.sw{width:38px;height:22px;border-radius:999px;background:#E3DCD2;position:relative;transition:.2s;flex:0 0 auto}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle.on{color:var(--ink)}.toggle.on .sw{background:var(--accent)}.toggle.on .sw::after{left:19px}
+
+/* desktop calendar */
+.layout{display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:start}
+.side{position:sticky;top:20px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}
+.mhead{display:flex;justify-content:space-between;align-items:center;margin:0 4px 12px}
+.mhead b{font-size:20px;font-weight:900}
+.arr{width:36px;height:36px;border-radius:11px;border:1px solid var(--line)!important;font-size:18px;font-weight:900}
+.arr:disabled{opacity:.25;cursor:default}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{text-align:center;font-size:12px;font-weight:800;color:var(--muted);padding-bottom:4px}
+.day{aspect-ratio:1/1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;color:var(--faint);font-size:15px}
+.day.has{background:var(--soft);color:var(--ink)}
+.day.has:hover{background:#FFE5D6}
+.day .dots{display:flex;gap:3px;margin-top:4px;height:6px}.day .dots i{width:6px;height:6px;border-radius:50%;background:var(--accent)}.day .dots i.o{background:#E0A100}
+.day.sel{background:var(--ink)!important;color:#fff}.day.sel .dots i{background:#fff}.day.sel .dots i.o{background:#FFC94D}
+.legend{font-size:12.5px;color:var(--muted);font-weight:700;margin:12px 4px 0;line-height:1.5}.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin:0 4px 1px 0}.legend i.o{background:#E0A100}
+
+/* mobile strip */
+.strip-wrap{display:none}
+.strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 14px 10px}
+.cell{flex:0 0 auto;display:flex;flex-direction:column;gap:4px}
+.ml{height:15px;font-size:12px;font-weight:900;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;padding-left:2px}
+.strip::-webkit-scrollbar{display:none}
+.chipd{flex:0 0 auto;scroll-snap-align:start;width:62px;border-radius:16px;background:var(--card);border:1px solid var(--line)!important;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.chipd .w{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase}
+.chipd .n{font-size:22px;font-weight:900;line-height:1.1}
+.chipd .m{font-size:11px;font-weight:800;color:var(--accent)}
+.chipd.sel{background:var(--ink);border-color:var(--ink)!important;color:#fff}.chipd.sel .w{color:#B9BBCC}.chipd.sel .m{color:#FFB59E}
+.mon{flex:0 0 auto;writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:900;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;padding:0 2px;align-self:center}
+
+/* events */
+.dh{margin:2px 0 14px}
+.dh .w{font-size:13px;font-weight:900;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.dh h2{margin:2px 0 0;font-size:28px;font-weight:900}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px}
+.ev-l{border-right:1px solid var(--line);padding-right:12px}
+.ev-time{font-size:22px;font-weight:900;line-height:1.15;letter-spacing:-.01em}
+.slot+.slot{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.ev-end{font-size:13px;font-weight:700;color:var(--muted);margin-top:1px;white-space:nowrap}
+.ev-dur{font-size:13px;font-weight:700;color:var(--muted);margin-top:8px;line-height:1.35}
+.ev h3{margin:0 0 4px;font-size:18px;font-weight:900;line-height:1.25}
+.desc{margin:0;font-size:15px;line-height:1.5;color:#4A4C5E}
+.ev-f{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#F4EFE8;color:var(--muted);white-space:nowrap}
+.chip.six{background:#FCF1DC;color:#8A5600}
+.buyrow{display:flex;align-items:center;gap:12px;margin-left:auto}
+.price{font-size:15px;font-weight:900;white-space:nowrap}
+.buy{display:inline-block;text-decoration:none;font-weight:800;font-size:14px;padding:9px 16px;border-radius:11px;border:1.5px solid var(--ink);color:var(--ink);background:#fff;white-space:nowrap}
+.buy:hover{background:var(--ink);color:#fff}
+.soldnote{font-size:13.5px;font-weight:700;color:var(--muted);padding:2px 4px}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:20px;padding:22px;color:var(--muted);font-weight:700;line-height:1.5}
+.src{color:var(--muted);font-size:12.5px;font-weight:600;line-height:1.55;margin-top:26px}
+
+@media (max-width:820px){
+  .wrap{padding:16px 0 48px}
+  .top{padding:0 14px;margin-bottom:12px}
+  h1{font-size:21px;white-space:nowrap}
+  .toggle{font-size:13px;gap:6px}
+  .tl-long{display:none}
+  .layout{display:block}
+  .side{position:static;margin:0 14px 18px;padding:12px}
+  .day{border-radius:10px}
+  .strip-wrap{display:block;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 85%,rgba(251,247,241,0));padding-top:8px}
+  #events{padding:6px 14px 0}
+  .dh h2{font-size:24px}
+  .ev{padding:14px;grid-template-columns:68px minmax(0,1fr);gap:12px}
+  .slot+.slot{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.ev-end{font-size:13px;font-weight:700;color:var(--muted);margin-top:1px;white-space:nowrap}
+.ev-dur{font-size:12px}
+  .ev-l{padding-right:10px}
+  .ev-time{font-size:19px}
+  .src{padding:0 14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Куда пойти с Дашей</h1>
+    <button class="toggle" id="t6" aria-pressed="false"><span class="sw"></span><span><span class="tl-long">Показать </span>6+</span></button>
+  </div>
+
+
+  <div class="layout">
+    <aside class="side">
+      <div class="mhead"><button class="arr" id="prev" aria-label="Назад">‹</button><b id="mname"></b><button class="arr" id="next" aria-label="Вперёд">›</button></div>
+      <div class="grid" id="grid"></div>
+    </aside>
+    <main id="events"></main>
+  </div>
+
+</div>
+
+<script>
+const QT = "https://quicktickets.ru/kirov-teatr-afanaseva/";
+const PUP = {venue:"Театр кукол им. Афанасьева, Спасская, 22", type:"puppet", age:"0+"};
+const PHIL = "Вятская филармония, Ленина, 102Б";
+
+const S = {
+ porosyata:{...PUP,t:"История трёх поросят",u:QT+"e3",d:"Три брата-поросёнка строят домики, а хитрый Волк пытается до них добраться. Весёлая история о том, что вместе ничего не страшно."},
+ ladushki:{...PUP,t:"Ладушки",u:QT+"e21",d:"Спектакль-игра для самых маленьких по народным потешкам."},
+ terem:{...PUP,t:"Терем-теремок",u:QT+"e20",d:"Звери один за другим просятся жить в теремок. Добрая сказка о том, что дом там, где мир и лад."},
+ terem_ny:{...PUP,t:"Терем-теремок (новогодний)",u:QT+"e78",d:"Новогодняя версия сказки о теремке, где всем хватает места."},
+ enot:{...PUP,t:"Крошка Енот",u:QT+"e13",d:"Маленький енот боится того, кто сидит в пруду. Спектакль о том, как сделать первый смелый шаг и улыбнуться страху."},
+ enot_ny:{...PUP,t:"Крошка Енот (новогодний)",u:QT+"e189",d:"Новогодний показ истории про маленького енота и его страх."},
+ kopytce:{...PUP,t:"Серебряное копытце",u:QT+"e45",d:"Девочка Дарёнка и кошка Мурёнка ждут в лесу волшебного козлика: там, где он топнет, появляются самоцветы. Куклы на ширме."},
+ kopytce_ny:{...PUP,t:"Серебряное копытце (новогодний)",u:QT+"e70",d:"Новогодний показ сказки про волшебного козлика с серебряным копытцем."},
+ medved:{...PUP,t:"Хочу быть медведем",u:QT+"e110",d:"Маленький коала мечтает стать медведем и попасть на Зимние медвежьи игры, поэтому идёт на хитрость."},
+ medved_ny:{...PUP,t:"Хочу быть медведем (новогодний)",u:QT+"e112",d:"Новогодний показ истории про коалу, который хочет стать медведем."},
+ volk:{...PUP,t:"Про Волка и козлят",u:QT+"e52",d:"Мама-коза просит козлят никому не открывать дверь, а Волк пытается их обмануть. Добрая поучительная сказка."},
+ volk_ny:{...PUP,t:"Про Волка и козлят (новогодний)",u:QT+"e150",d:"Новогодний показ сказки про козлят и хитрого Волка."},
+ ryaba:{...PUP,t:"Курочка Ряба",u:QT+"e162",d:"Та самая сказка про золотое яичко, уютная встреча для всей семьи."},
+ ryaba_ny:{...PUP,t:"Курочка Ряба (новогодний)",u:QT+"e185",d:"Дедушка, Бабушка, Иванушка и Курочка встречают праздник в деревенском доме. Малая сцена."},
+ shuka:{...PUP,t:"По щучьему велению",u:QT+"e50",d:"Емеля ловит волшебную щуку, и вёдра сами идут за водой, а печка едет по дороге!"},
+ shuka_ny:{...PUP,t:"По щучьему велению (новогодний)",u:QT+"e69",d:"Новогодний показ сказки про Емелю и волшебную щуку."},
+ umka:{...PUP,t:"Умка",u:QT+"e47",d:"В полярную ночь среди снегов рождается белый медвежонок Умка и узнаёт, как устроен мир."},
+ umka_ny:{...PUP,t:"Умка (новогодний)",u:QT+"e68",d:"Новогодний показ истории про белого медвежонка."},
+ solnce:{...PUP,t:"Солнышко и снежные человечки",u:QT+"e60",d:"Про любимую зимнюю забаву: лепить снеговиков! И про то, что снеговики любят больше всего. Короткий спектакль для малышей."},
+ solnce_ny:{...PUP,t:"Солнышко и снежные человечки (новогодний)",u:QT+"e80",d:"Новогодний показ светлой сказки про снеговиков."},
+ gusi:{...PUP,t:"Гуси-лебеди, или Привередница",u:QT+"e15",d:"Гуси-лебеди уносят братца, и сестрёнка идёт его выручать. Ей помогают печка, яблоня и речка."},
+ gusi_ny:{...PUP,t:"Гуси-лебеди (новогодний)",u:QT+"e79",d:"Новогодний показ сказки о смелой сестрёнке."},
+ kluchik:{...PUP,t:"Золотой ключик, или Приключения Буратино",u:QT+"e6",d:"Буратино уже открыл потайную дверцу и вместе с друзьями создал свой кукольный театр. Праздничный спектакль о дружбе."},
+ koroleva:{...PUP,t:"Снежная королева",u:QT+"e86",d:"Герда отправляется в снежное царство спасать друга Кая. Красивый зимний спектакль по Андерсену."},
+ koroleva_ny:{...PUP,t:"Снежная королева (новогодний)",u:QT+"e71",d:"Новогодний показ сказки про Герду и Кая."},
+ moidodyr:{...PUP,t:"Мойдодыр",u:QT+"e99",d:"Весёлый музыкальный спектакль про мальчика-грязнулю, от которого убежало одеяло."},
+ kolobok:{...PUP,t:"Колобок. Путь к мечте",u:QT+"e136",d:"Премьера! Фантазия на тему сказки про Колобка."},
+ gav:{...PUP,t:"Котёнок по имени Гав",u:QT+"e2",d:"Котёнок с собачьим именем и его друг щенок узнают, что такое гроза и эхо. Смешная история о дружбе."},
+ chudesa:{...PUP,t:"Где зимуют чудеса",u:QT+"e62",d:"Новогоднее представление для малышей про снежную страну и отважную девочку Нануку. Вечерний показ."},
+ lyagushka:{...PUP,t:"Царевна-лягушка",u:QT+"e186",d:"Стрела Ивана-царевича попадает к лягушке, а та оказывается заколдованной царевной."},
+ more:{...PUP,t:"Морские приключения",u:QT+"e105",d:"Спектакль для малышей на морскую тему. Подробности на странице театра."},
+ aibolit_ny:{...PUP,t:"Айболит (новогодний)",u:QT+"e188",d:"Добрый доктор Айболит спешит в Африку лечить зверей. По стихам Чуковского."},
+ // kassir
+ priroda:{type:"phil",age:"6+",venue:PHIL,price:"от 400 ₽",t:"Природа — это дом, в котором мы живём",u:"https://kirov.kassir.ru/detyam/priroda--eto-dom-v-kotorom-myi-jivem",d:"Музыкально-театральное представление о том, как беречь лес, реки и животных. 50 минут."},
+ izumrud:{type:"phil",age:"6+",venue:PHIL,price:"от 300 ₽",t:"Волшебник Изумрудного города",u:"https://kirov.kassir.ru/detyam/volshebnik-izumrudnogo-goroda-muzyikalno-teatralizovannoe-predstavlenie",d:"Сказка про Элли и Тотошку под оркестр русских народных инструментов. 1 час."},
+ gorbunok:{type:"phil",age:"6+",venue:PHIL,price:"от 300 ₽",t:"Конёк-горбунок",u:"https://kirov.kassir.ru/detyam/konek-gorbunok-muzyikalnaya-skazka",d:"Музыкальная сказка по Ершову: оркестр, чтец и песочная анимация. 1 час."},
+ ldinka:{type:"phil",age:"6+",venue:PHIL+" (Малый зал)",price:"от 400 ₽",t:"Что скрывает Льдинка?",u:"https://kirov.kassir.ru/detyam/chto-skryivaet-ldinka",d:"Новогодняя музыкальная сказка: Снегурочка и друзья разгадывают тайну маленькой Льдинки. 50 минут."},
+ saltan:{type:"phil",age:"6+",venue:PHIL,price:"от 300 ₽",t:"Сказка о царе Салтане",u:"https://kirov.kassir.ru/detyam/skazka-o-tsare-saltane",d:"Пушкинская сказка под оркестр народных инструментов с песочной анимацией. 1 час."},
+ zvezda:{type:"show",age:"0+",venue:"Концертный зал «Твориста», Владимирская, 21",price:"от 700 ₽",t:"Звёздная мечта Деда Мороза",u:"https://kirov.kassir.ru/teatr/zvezdnaya-mechta-deda-moroza",d:"Жар-птица хочет погасить волшебную звезду, а Дед Мороз и Снегурочка её спасают. Спецэффекты и игры со зрителями."},
+ chasy:{type:"show",age:"0+",venue:"ДК «Родина», Гайдара, 3",price:"от 600 ₽",t:"Тайна волшебных часов",u:"https://kirov.kassir.ru/detyam/tayna-volshebnyih-chasov",d:"Пятеро проказников останавливают волшебные часы и чуть не срывают Новый год. Сказка о дружбе и ответственности."},
+ karlson:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",price:"от 350 ₽",t:"Малыш и Карлсон",u:"https://kirov.kassir.ru/teatr/malyish-i-karlson-14",d:"Музыкальная сказка про Малыша и Карлсона, который живёт на крыше. 1 ч 20 мин."},
+ ladybug:{type:"show",age:"6+",venue:"ДК РЖД, Комсомольская, 3",price:"от 1 490 ₽",t:"Леди Баг и Супер Кот: Миссия Новый год",u:"https://kirov.kassir.ru/detyam/ledi-bag-i-super-kot-missiya-novyiy-god",d:"Новогоднее шоу с героями мультсериала."},
+ minecraft:{type:"show",age:"0+",venue:"ДК «Родина», Гайдара, 3",price:"от 1 200 ₽",t:"Майнкрафт-шоу",u:"https://kirov.kassir.ru/shou/maynkraft-shou-21",d:"Интерактивное шоу со Стивом и друзьями: ростовые куклы, спецэффекты, свет. Для малыша может быть громко."},
+ leopold:{type:"drama",age:"0+",venue:"Драмтеатр, Малая сцена, Московская, 37",price:"от 500 ₽",t:"Вечеринка у кота Леопольда",u:"https://kirov.kassir.ru/teatr/vecherinka-u-kota-leopolda",d:"Леопольд готовится к дню рождения, а мышки устраивают проказы. Песни и примирение в финале. 50 минут."},
+ // театр кукол 6+
+ kozliki:{...PUP,age:"6+",t:"Отважные козлики Ингвар",u:QT+"e168",d:"Три козлика с северных скал отправляются в путь к заповедной лужайке."},
+ kozliki_ny:{...PUP,age:"6+",t:"Отважные козлики Ингвар (новогодний)",u:QT+"e184",d:"Новогодний показ истории про трёх смелых козликов."},
+ rybka:{...PUP,age:"6+",t:"Сказка о рыбаке и рыбке",u:QT+"e54",d:"Пушкинская сказка о старике, старухе и волшебной золотой рыбке."},
+ yastrebok:{...PUP,age:"6+",t:"Ястребок",u:QT+"e121",d:"Сказка о бумажном самолётике, который становится героем на войне. Для детей постарше."},
+ alisa:{...PUP,age:"6+",t:"Алиса в стране чудес",u:QT+"e66",d:"Любопытная Алиса путешествует по странному миру чудес."},
+ aladdin:{...PUP,age:"6+",t:"Аладдин",u:QT+"e163",d:"Юноша с добрым сердцем, принцесса и джинн из волшебной лампы."},
+ aladdin_ny:{...PUP,age:"6+",t:"Аладдин (новогодний)",u:QT+"e187",d:"Новогодняя версия сказки про Аладдина, принцессу Будур и джинна."},
+ fonar:{...PUP,age:"6+",t:"Волшебный фонарь",u:QT+"e180",d:"Театр кукол рассказывает о главном без нравоучений."},
+ fonar_ny:{...PUP,age:"6+",t:"Волшебный фонарь (новогодний)",u:QT+"e183",d:"Новогодняя версия «Волшебного фонаря»."},
+ noch:{...PUP,age:"6+",t:"Ночь перед Рождеством",u:QT+"e106",d:"Зимняя сказка по Гоголю о мечтах, которые сбываются в праздничную ночь."},
+ noch_ny:{...PUP,age:"6+",t:"Ночь перед Рождеством (новогодний)",u:QT+"e152",d:"Гоголевская зимняя история для юных зрителей."},
+ karlson_k:{...PUP,age:"6+",t:"Карлсон, который живёт на крыше",u:QT+"e64",d:"Дружба Малыша с озорным Карлсоном с пропеллером. Кукольная версия."},
+ kshow:{...PUP,age:"6+",t:"Кукольное шоу (новогоднее)",u:QT+"e149",d:"Куклы и предметы без слов рассказывают о театре и вдохновении."},
+ saltan_k:{...PUP,age:"6+",t:"Сказка о царе Салтане (новогодний)",u:QT+"e154",d:"Пушкинская сказка о царе Салтане, князе Гвидоне и царевне Лебеди."},
+ ivan:{...PUP,age:"6+",t:"Иван-царевич и Серый волк (новогодний)",u:QT+"e116",d:"Русская волшебная сказка в стихах Жуковского."},
+ // драмтеатр
+ vsemozhno:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Всё можно… или как прожить без взрослых",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e29",d:"Приключения юных сорванцов, оставшихся без взрослых. По пьесе Т. Ворониной."},
+ bratec:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Братец Лис и Братец Кролик",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e314",d:"Ковбойская сказка по мотивам историй Д. Харриса про хитрых Лиса и Кролика."},
+ gorbunok_d:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Конёк-горбунок (спектакль)",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e206",d:"Сказка по стихам Ершова про Ивана и его волшебного конька."},
+ shelkunchik:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Щелкунчик (балет)",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e340",d:"Балет на музыку Чайковского в исполнении Театра балета г. Кирова."},
+ dramatur:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Драма-тур (экскурсия за кулисы)",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e27",d:"Экскурсия по закулисью и театральному музею."},
+ lampa:{type:"drama",age:"6+",venue:"Драмтеатр, Московская, 37",t:"Волшебная лампа Аладдина",u:"https://quicktickets.ru/kirov-dramteatr-kirova/e404",d:"Сказка с восточным колоритом, гастроли Архангельского театра драмы."},
+ // детская филармония
+ poteryannoe:{type:"phil",age:"0+",venue:"Детская филармония, Ленина, 100",t:"Новогодняя сказка о потерянном времени",u:"https://quicktickets.ru/kirov-detskaya-filarmoniya/e25",d:"Новогоднее представление Детской филармонии."},
+};
+
+// [дата, время, ключ, распродано]
+const E = [
+ ["2026-11-03","11:00","ladushki",1],["2026-11-04","11:00","porosyata"],["2026-11-07","11:00","terem"],
+ ["2026-11-08","11:00","enot"],["2026-11-08","11:00","kopytce"],
+ ["2026-11-14","11:00","medved"],["2026-11-14","11:00","volk"],["2026-11-14","12:00","izumrud"],
+ ["2026-11-15","11:00","ryaba"],["2026-11-21","11:00","shuka"],["2026-11-21","11:00","priroda"],
+ ["2026-11-22","11:00","umka"],["2026-11-22","11:00","solnce"],["2026-11-28","11:00","gusi"],
+ ["2026-11-29","11:00","kluchik"],["2026-11-29","11:00","koroleva"],
+ ["2026-12-05","11:00","moidodyr"],["2026-12-06","11:00","ryaba"],["2026-12-10","18:00","kolobok"],
+ ["2026-12-12","11:00","enot"],["2026-12-12","12:00","gorbunok"],
+ ["2026-12-13","11:00","gav"],["2026-12-13","11:00","solnce"],
+ ["2026-12-19","11:00","shuka_ny"],["2026-12-19","14:00","shuka_ny"],["2026-12-19","16:00","zvezda"],
+ ["2026-12-20","11:00","kopytce_ny"],["2026-12-20","14:00","kopytce_ny"],["2026-12-20","11:00","gusi_ny"],
+ ["2026-12-20","11:00","chasy"],["2026-12-20","16:00","zvezda"],
+ ["2026-12-22","11:00","medved_ny"],["2026-12-22","17:00","chudesa"],["2026-12-23","17:00","chudesa"],
+ ["2026-12-26","11:00","ryaba_ny"],["2026-12-26","14:00","ryaba_ny"],["2026-12-26","11:00","ldinka"],["2026-12-26","13:00","ldinka"],
+ ["2026-12-27","11:00","umka_ny"],["2026-12-27","14:00","umka_ny"],["2026-12-27","11:00","koroleva_ny",1],["2026-12-27","14:00","koroleva_ny",1],["2026-12-27","17:00","koroleva_ny",1],
+ ["2026-12-27","11:00","ldinka"],["2026-12-27","13:00","ldinka"],
+ ["2026-12-29","11:00","lyagushka"],["2026-12-29","17:00","chudesa"],["2026-12-29","11:00","ldinka"],["2026-12-29","13:00","ldinka"],
+ ["2026-12-30","11:00","terem_ny"],["2026-12-30","11:00","ldinka"],["2026-12-30","13:00","ldinka"],
+ ["2027-01-02","11:00","koroleva_ny"],["2027-01-02","14:00","koroleva_ny"],
+ ["2027-01-03","11:00","medved_ny"],["2027-01-03","14:00","medved_ny"],["2027-01-03","11:00","volk_ny"],["2027-01-03","17:00","chudesa"],
+ ["2027-01-04","11:00","ryaba_ny"],["2027-01-04","17:00","chudesa"],["2027-01-04","13:00","chasy"],["2027-01-04","10:30","karlson"],
+ ["2027-01-05","11:00","more"],["2027-01-05","17:00","chudesa"],["2027-01-05","11:00","ladybug"],
+ ["2027-01-06","11:00","gusi_ny"],["2027-01-06","17:00","chudesa"],["2027-01-06","11:00","minecraft"],
+ ["2027-01-07","11:00","aibolit_ny"],["2027-01-07","14:00","aibolit_ny"],
+ ["2027-01-08","11:00","kopytce_ny"],["2027-01-08","11:00","enot_ny"],["2027-01-08","17:00","chudesa"],["2027-01-08","10:30","leopold"],
+ ["2027-01-09","11:00","umka_ny"],["2027-01-09","11:00","solnce_ny"],["2027-01-09","17:00","chudesa"],
+ ["2027-01-10","11:00","shuka_ny"],["2027-01-23","12:00","saltan"],
+ ["2026-11-01","11:00","kozliki"],["2026-11-01","11:00","rybka"],["2026-11-01","11:00","lampa",1],
+ ["2026-11-04","11:00","yastrebok"],["2026-11-07","11:00","alisa"],["2026-11-15","11:00","aladdin"],["2026-12-06","11:00","aladdin"],
+ ["2026-11-21","11:00","fonar"],["2026-11-26","11:00","fonar",1],["2026-12-05","13:00","fonar"],
+ ["2026-11-27","11:00","noch",1],["2026-11-28","11:00","noch"],["2026-12-12","11:00","karlson_k"],
+ ["2026-12-19","11:00","fonar_ny"],["2027-01-10","11:00","fonar_ny"],["2026-12-24","11:00","kshow",1],["2026-12-24","14:00","kshow",1],
+ ["2026-12-25","11:00","saltan_k",1],["2026-12-25","14:00","saltan_k"],["2026-12-25","17:00","saltan_k"],["2026-12-26","11:00","saltan_k"],["2026-12-26","14:00","saltan_k"],
+ ["2027-01-07","11:00","saltan_k"],["2027-01-07","14:00","saltan_k"],
+ ["2026-12-30","11:00","noch_ny"],["2027-01-06","11:00","noch_ny"],["2027-01-06","14:00","noch_ny"],
+ ["2026-12-23","11:00","kozliki_ny"],["2026-12-23","14:00","kozliki_ny"],["2027-01-05","11:00","kozliki_ny"],["2027-01-05","14:00","kozliki_ny"],
+ ["2027-01-04","11:00","aladdin_ny"],["2027-01-04","14:00","aladdin_ny"],["2027-01-02","11:00","ivan"],["2027-01-02","14:00","ivan"],
+ ["2026-11-08","11:00","vsemozhno"],["2026-12-31","11:00","vsemozhno"],["2027-01-02","10:30","vsemozhno"],
+ ["2026-11-29","11:00","bratec"],["2026-12-25","11:00","bratec"],["2027-01-03","10:30","bratec"],["2027-01-07","10:30","bratec"],
+ ["2026-12-06","11:00","gorbunok_d"],["2026-12-20","11:00","gorbunok_d"],["2027-01-05","10:30","gorbunok_d"],["2027-01-06","10:30","gorbunok_d"],
+ ["2026-12-11","18:30","shelkunchik"],["2026-12-12","13:00","shelkunchik"],["2026-12-12","18:00","shelkunchik"],["2026-12-13","11:00","shelkunchik"],["2026-12-13","16:00","shelkunchik"],
+ ["2026-11-07","14:00","dramatur",1],["2026-11-08","14:00","dramatur",1],["2026-11-10","10:00","dramatur",1],["2026-11-14","14:00","dramatur"],["2026-11-15","14:00","dramatur"],
+ ["2026-11-21","14:00","dramatur"],["2026-11-22","14:00","dramatur"],["2026-11-28","14:00","dramatur"],["2026-11-29","14:00","dramatur"],
+ ["2026-12-27","11:00","karlson",1],["2027-01-09","10:30","leopold",1],
+ ["2026-12-30","17:30","poteryannoe"],["2027-01-04","10:00","poteryannoe"],["2027-01-04","16:00","poteryannoe"],
+];
+
+
+// --- добавлено: Театр на Спасской, филармония, цирк ---
+Object.assign(S,{
+ jungle:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 600 ₽",t:"Книга джунглей",u:"https://ekvus-kirov.ru/afisha/",d:"Премьера. Маугли растёт среди волков, а его друзья — медведь Балу и пантера Багира."},
+ utenok:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 400 ₽",t:"Гадкий утёнок",u:"https://ekvus-kirov.ru/afisha/",d:"Сказка Андерсена об утёнке, которого все дразнили, а он вырос прекрасным лебедем."},
+ kashtanka:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 400 ₽",t:"Каштанка",u:"https://ekvus-kirov.ru/afisha/",d:"По Чехову: рыжая собачка потерялась и попала к цирковому артисту."},
+ zolushka:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 400 ₽",t:"Золушка",u:"https://ekvus-kirov.ru/afisha/",d:"Знаменитая сказка о хрустальном башмачке в музыкальной постановке. 1 ч 35 мин с антрактом."},
+ soldatik:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 400 ₽",t:"Стойкий оловянный солдатик",u:"https://ekvus-kirov.ru/afisha/",d:"Сказка Андерсена об отважном одноногом солдатике и бумажной балерине."},
+ ivanbog:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",t:"Иван — богатырский сын",u:"https://ekvus-kirov.ru/afisha/",d:"Богатырская сказка о подвигах Ивана."},
+ ostrov:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 400 ₽",t:"Остров сокровищ",u:"https://ekvus-kirov.ru/afisha/",d:"Пираты, карта и поиски клада по Стивенсону. Для детей постарше."},
+ carevna:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17",price:"от 500 ₽",t:"Сказка о мёртвой царевне и семи богатырях",u:"https://ekvus-kirov.ru/afisha/",d:"Премьера по сказке Пушкина."},
+ liliya:{type:"drama",age:"0+",venue:"Театр на Спасской, Спасская, 17",price:"от 500 ₽",t:"Серебряная лилия",u:"https://ekvus-kirov.ru/afisha/",d:"Новогодний кукольный спектакль Театра на Спасской для самых маленьких."},
+ vyatskie:{type:"drama",age:"6+",venue:"Театр на Спасской, Спасская, 17, экспериментальная сцена",price:"от 600 ₽",t:"Вятские сказки",u:"https://ekvus-kirov.ru/afisha/",d:"Местные вятские сказки — смешные и мудрые."},
+ perepoloh:{type:"phil",age:"6+",venue:"Вятская филармония, Ленина, 102Б",price:"от 500 ₽",t:"Новогодний переполох (балет-сказка)",u:"https://www.afisha.ru/performance/balet-skazka-novogodniy-perepoloh-1009483/",d:"Дед Мороз и Леший спорят, кто отвечает за Новый год. Танцы, перевоплощения и световые эффекты."},
+ lyagushka_org:{type:"phil",age:"0+",venue:"Органный зал, Дерендяева, 46",price:"от 700 ₽",t:"Царевна-лягушка (ёлка)",u:"https://www.afisha.ru/performance/carevna-lyagushka-1009481/",d:"Новогодний детский спектакль по русской народной сказке в Органном зале филармонии."},
+ zhiraf:{type:"show",age:"0+",venue:"Цирк, Октябрьский пр., 147",price:"от 800 ₽",t:"Жираф шоу (цирк)",u:"https://afisha.yandex.ru/kirov/circus_show/zhiraf-shou-rosgostsirk",d:"Акробаты, клоуны, львы, лошади и главная звезда — жираф Багир. 2,5 часа с антрактом."},
+ sekrety:{type:"show",age:"6+",venue:"ДК РЖД, Комсомольская, 3",price:"от 1 600 ₽",t:"Никаких секретов (шоу иллюзионистов)",u:"https://www.afisha.ru/performance/nikakih-sekretov-249512/",d:"Шоу фокусников и иллюзий. Вечерний показ."},
+});
+E.push(
+ ["2026-11-01","11:00","jungle"],["2026-11-01","14:00","jungle"],["2026-12-12","11:00","jungle"],
+ ["2026-11-07","11:00","utenok"],["2026-11-14","11:00","kashtanka"],
+ ["2026-11-15","11:00","zolushka"],["2026-12-06","11:00","zolushka"],["2027-01-02","11:00","zolushka"],
+ ["2026-11-21","11:00","soldatik"],["2027-01-06","11:00","soldatik"],
+ ["2026-11-22","11:00","ivanbog"],["2027-01-07","11:00","ivanbog"],
+ ["2026-11-28","11:00","ostrov"],["2026-12-05","11:00","ostrov"],["2027-01-03","11:00","ostrov"],
+ ["2026-11-29","14:00","carevna"],["2026-12-13","14:00","carevna"],["2026-12-27","14:00","carevna"],["2027-01-08","14:00","carevna"],
+ ["2026-12-24","11:00","liliya"],["2026-12-25","11:00","liliya"],["2027-01-04","11:00","liliya"],["2027-01-05","11:00","liliya"],
+ ["2027-01-06","18:15","vyatskie"],
+ ["2026-12-23","15:00","perepoloh"],["2027-01-05","12:00","perepoloh"],["2027-01-06","12:00","perepoloh"],["2027-01-08","12:00","perepoloh"],
+ ["2026-12-20","10:30","lyagushka_org"],["2026-12-20","13:00","lyagushka_org"],["2026-12-27","10:30","lyagushka_org"],["2026-12-27","13:00","lyagushka_org"],["2027-01-03","10:30","lyagushka_org"],["2027-01-03","13:00","lyagushka_org"],
+ ["2026-11-01","13:00","zhiraf"],["2026-11-04","17:00","zhiraf"],["2026-11-07","17:00","zhiraf"],["2026-11-08","13:00","zhiraf"],
+ ["2026-11-12","19:00","sekrety"]
+);
+
+// длительность (мин) и рекомендуемый театром возраст
+// [минут, с какого возраста советует театр, антракт: минут или true]
+const X={
+ ladushki:[null,2],porosyata:[55,4,20],terem:[35,2],enot:[40,3],kopytce:[45,3,15],medved:[55,3,true],volk:[35,3],ryaba:[null,3],
+ shuka:[55,3,15],umka:[55,4,15],solnce:[40,3],gusi:[35,3],kluchik:[55,5,20],koroleva:[60,4],moidodyr:[35,3],kolobok:[null,3],
+ gav:[45,4],chudesa:[35,1],lyagushka:[60,3,15],more:[50,2],aibolit_ny:[50,4],
+ priroda:[50],zolushka:[95],perepoloh:[90],zhiraf:[150],izumrud:[60],gorbunok:[60],ldinka:[50],saltan:[60],karlson:[80],leopold:[50],
+};
+// цены: известные «от», для остальных спектаклей театра кукол — обычный диапазон
+const P={ryaba:"от 500 ₽",ryaba_ny:"от 500 ₽",aibolit_ny:"от 500 ₽",umka:"от 400 ₽",umka_ny:"от 400 ₽",volk:"от 500 ₽",volk_ny:"от 500 ₽",
+ moidodyr:"от 400 ₽",saltan_k:"от 400 ₽",rybka:"от 500 ₽",ivan:"от 400 ₽",
+ bratec:"от 350 ₽",vsemozhno:"от 350 ₽",gorbunok_d:"от 350 ₽",karlson:"от 350 ₽",shelkunchik:"от 800 ₽",leopold:"500 ₽",dramatur:"300 ₽",lampa:"от 400 ₽",
+ poteryannoe:"цена на сайте"};
+for(const k in S){if(P[k])S[k].price=P[k];else if(!S[k].price&&S[k].type==="puppet")S[k].price="≈ 400–500 ₽";}
+S.koroleva.age="6+";S.koroleva_ny.age="6+";
+S.more.d="Щенок Шуня на подводной лодке отправляется искать кита Белобока, находит друзей и узнаёт много нового о море.";
+
+const MONTHS=[[2026,10,"Ноябрь"],[2026,11,"Декабрь"],[2027,0,"Январь"]];
+const MG=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const MS=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const DW=["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+const DWS=["вс","пн","вт","ср","чт","пт","сб"];
+const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+const toD=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)};
+const key=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const busy=d=>d.getDay()===1||d.getDay()===4;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pl=(n,a,b,c)=>n%10===1&&n%100!==11?a:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?b:c);
+
+// нормализация: одно название, признак ёлки, длительность, возраст
+function norm(k){
+  const s=S[k];if(!s)return null;
+  const base=k.replace(/_ny$/,"");const ny=/_ny$/.test(k)||/новогод|ёлка/i.test(s.t)||["chudesa","liliya","chasy","zvezda","ldinka","ladybug","poteryannoe","perepoloh"].includes(k);
+  const x=X[k]||X[base]||[];
+  return {...s,key:base,
+    title:s.t.replace(/\s*\([^)]*\)\s*$/,"").replace(/^Новогоднее\s*«?|»$/g,""),
+    d:(S[base]&&k!==base?S[base].d:s.d),ny,dur:x[0]||(s.type==="puppet"?45:null),approx:!x[0]&&s.type==="puppet",rec:x[1]||null,brk:x[2]||null,
+    site:s.u.includes("kassir")?"Kassir":"Quick Tickets"};
+}
+const ALL=E.map(e=>({date:e[0],time:e[1],s:norm(e[2]),sold:!!e[3]}))
+  .filter(e=>e.s&&toD(e.date)>=today)
+  .sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+
+let show6=false; // не запоминаем: каждый раз открываем вариант для малышей
+const fits=e=>show6||e.s.age==="0+";
+const avail=()=>ALL.filter(e=>fits(e)&&!e.sold);
+const days=()=>[...new Set(avail().map(e=>e.date))];
+let sel=days()[0]||null;
+let m=monthOf(sel);
+function monthOf(k){if(!k)return 0;const d=toD(k);const i=MONTHS.findIndex(([y,mo])=>y===d.getFullYear()&&mo===d.getMonth());return i<0?0:i}
+
+function renderGrid(){
+  const [y,mo,name]=MONTHS[m];
+  document.getElementById("mname").textContent=`${name} ${y}`;
+  document.getElementById("prev").disabled=m===0;document.getElementById("next").disabled=m===MONTHS.length-1;
+  const cnt={};avail().forEach(e=>{cnt[e.date]=cnt[e.date]||new Map();cnt[e.date].set(e.s.key+e.s.ny,e.s.age)});
+  let g=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(d=>`<div class="dow">${d}</div>`).join("");
+  const off=(new Date(y,mo,1).getDay()+6)%7;for(let i=0;i<off;i++)g+="<div></div>";
+  for(let d=1;d<=new Date(y,mo+1,0).getDate();d++){
+    const k=key(new Date(y,mo,d)),c=cnt[k]?cnt[k].size:0;
+    g+=c?`<button class="day has ${k===sel?"sel":""}" data-k="${k}" aria-label="${d} ${MG[mo]}, ${c} ${pl(c,"спектакль","спектакля","спектаклей")}">${d}<span class="dots">${[...cnt[k].values()].sort().slice(0,4).map(a=>`<i class="${a==="6+"?"o":""}"></i>`).join("")}</span></button>`:`<div class="day">${d}</div>`;
+  }
+  const el=document.getElementById("grid");el.innerHTML=g;
+  el.querySelectorAll(".day.has").forEach(b=>b.onclick=()=>pick(b.dataset.k));
+}
+function renderEvents(){
+  const ev=document.getElementById("events");
+  if(!sel){ev.innerHTML=`<div class="empty">Подходящих дат пока нет.</div>`;return}
+  const d=toD(sel);
+  const dayAll=ALL.filter(e=>e.date===sel&&fits(e));
+  const g={};dayAll.filter(e=>!e.sold).forEach(e=>{(g[e.s.key+e.s.ny]=g[e.s.key+e.s.ny]||{s:e.s,times:[]}).times.push(e.time)});
+  const items=Object.values(g).sort((a,b)=>a.times[0].localeCompare(b.times[0]));
+  const soldN=dayAll.filter(e=>e.sold).length;
+  ev.innerHTML=`<div class="dh"><div class="w">${DW[d.getDay()]}</div><h2>${d.getDate()} ${MG[d.getMonth()]}</h2></div>`+
+   items.map(({s,times})=>{
+     const place=esc(s.venue.split(",")[0].replace(" им. Афанасьева",""));
+     const dur=s.dur?`${s.dur} мин${s.brk?`<br><span style="white-space:nowrap">+ антракт</span>`:""}`:"";
+     const age=s.age==="6+"?`<span class="chip six">6+</span>`:"";
+     const price=s.price?s.price.replace("≈ ","~"):"";
+     return `<article class="ev"><div class="ev-l">${times.length>1?`<div class="ev-end" style="margin:0 0 2px">Начало</div>${times.map(t=>`<div class="ev-time">${t}</div>`).join("")}`:`<div class="ev-time">${times[0]}</div><div class="ev-end">${endOf(times[0],s)}</div>`}</div>
+       <div><h3>${s.ny?"🎄 ":""}${esc(s.title)}</h3><p class="desc">${esc(s.d)}</p>
+       <div class="ev-f"><div class="chips">${age}<span class="chip" title="${esc(s.venue)}">📍 ${place}</span></div>
+       <div class="buyrow">${price&&price!=="цена на сайте"?`<span class="price">${price}</span>`:""}<a class="buy" href="${s.u}" target="_blank" rel="noopener">Билеты ↗</a></div></div></div></article>`}).join("")+
+   (soldN?`<div class="soldnote">Ещё ${soldN} ${pl(soldN,"показ","показа","показов")} в этот день уже распродан${soldN>1?"ы":""}.</div>`:"");
+}
+function endOf(t,s){
+  if(!s.dur)return `<span title="Площадка не указала длительность" style="opacity:.55">до —</span>`;
+  const [h,m]=t.split(":").map(Number);const tot=h*60+m+s.dur+(typeof s.brk==="number"?s.brk:0);
+  return "до "+(s.approx?"~":"")+Math.floor(tot/60)+":"+String(tot%60).padStart(2,"0");
+}
+function pick(k){sel=k;m=monthOf(k);render();if(innerWidth<=820){const h=document.querySelector(".dh");if(h&&h.getBoundingClientRect().top>innerHeight*0.75)h.scrollIntoView({behavior:"smooth"})}}
+function render(){renderGrid();renderEvents();
+  const t=document.getElementById("t6");t.classList.toggle("on",show6);t.setAttribute("aria-pressed",show6);
+  document.getElementById("t6").onclick=()=>{show6=!show6;if(!days().includes(sel))sel=days()[0]||null;m=monthOf(sel);render()};}
+document.getElementById("prev").onclick=()=>{m--;const [y,mo]=MONTHS[m];sel=days().find(k=>toD(k).getFullYear()===y&&toD(k).getMonth()===mo)||sel;render()};
+document.getElementById("next").onclick=()=>{m++;const [y,mo]=MONTHS[m];sel=days().find(k=>toD(k).getFullYear()===y&&toD(k).getMonth()===mo)||sel;render()};
+render();
+</script>
+</body>
+</html>
